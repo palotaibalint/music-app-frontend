@@ -1,13 +1,9 @@
-import { Carousel } from "./components/Carousel";
-import { ExploreMusic } from "./components/ExploreMusic";
-import { Heros } from "./components/Heros";
+import { AssembledHomePage } from "./components/AssembledHomePage";
 
 export const HomePage = () => {
   return (
-    <>
-      <ExploreMusic />
-      <Carousel />
-      <Heros />
-    </>
+    <body className="background-neutral">
+      <AssembledHomePage />
+    </body>
   );
 };

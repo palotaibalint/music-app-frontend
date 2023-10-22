@@ -1,15 +1,26 @@
 import React from "react";
 import "./App.css";
-import { Navbar } from "./layouts/NavBarAndFooter/Navbar";
-import { Footer } from "./layouts/NavBarAndFooter/Footer";
 import { HomePage } from "./layouts/HomePage/HomePage";
+import { SearchMusic } from "./layouts/SearchMusicPage/SearchMusic";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./errorpage/404Error";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/search",
+    element: <SearchMusic />,
+  },
+]);
 
 export const App = () => {
   return (
     <div>
-      <Navbar />
-      <HomePage />
-      <Footer />
+      <RouterProvider router={router} />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+/* homepage foundation */
 .homepage-container{
   height:45vh;
 }
@@ -6,18 +7,46 @@
   padding:20px;
 }
 
-.col-image-left {
-  background-image: url("./Images/blank.jpg");
-  height: 25em !important;
+.fixed-sidebar{
+  width:23%;
+  height:100%;
 }
 
-.col-image-right {
-  background-image: url("./Images/blank.jpg");
-  height: 25em !important;
+/* colors */
+
+.primary-color{
+  background-color: #140936; 
 }
 
-.homepage-carousel-title {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+.playlist-item{
+  background-color: #140936; 
 }
+
+.playlist-item:hover{
+  background-color: #1f0e50;
+}
+
+.background-main{
+  background-color: #0f0335; 
+}
+
+.background-darker{
+  background-color: #0a0127; 
+}
+
+.text-color{
+  color: #EDEDED; 
+}
+
+.main-span{
+  color: #8b8989;
+}
+
+.main-span:hover{
+  color: #EDEDED;
+}
+
+.main-span:active{
+  color:#EDEDED;
+}
+

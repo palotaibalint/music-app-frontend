@@ -7,8 +7,32 @@
   padding:20px;
 }
 
+.custom-container {
+  overflow-y: hidden;
+}
+
+.sticky-sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  height: calc(100vh); /* Adjust the height as needed to account for the Bootstrap navbar height */
+  overflow-y: auto;
+}
+
+.sticky-sidebar::-webkit-scrollbar {
+  width: 0.5em; /* Adjust the width as needed */
+}
+
+.sticky-sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Hide the thumb */
+}
+
+.sticky-sidebar {
+  scrollbar-width: thin; /* Firefox */
+}
+
 .fixed-sidebar{
-  width:23%;
+  width:100%;
   height:100%;
 }
 

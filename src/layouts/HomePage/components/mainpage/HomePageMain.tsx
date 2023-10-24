@@ -12,8 +12,8 @@ export const HomePageMain = () => {
         <TopSongs />
         <SongsForYou />
         <YourMostPlayed />
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 };

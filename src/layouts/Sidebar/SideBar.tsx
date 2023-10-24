@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 export const SideBar = () => {
   return (
-    <div className="col-sm-3 background-darker d-flex flex-column justify-content-between min-vh-100 ">
-      <div className="position-fixed fixed-sidebar">
+    <nav className="col-sm-3 background-darker d-flex d-none d-md-block flex-column justify-content-between sticky-sidebar sidebar">
+      <div className="fixed-sidebar">
         <a className="text-decoration-none ms-4 d-flex align-items-center text-color d-none d-sm-inline">
           <span className="fs-1">HarmonyCritic</span>
         </a>
@@ -17,7 +17,7 @@ export const SideBar = () => {
           </li>
           <li className="nav-item text-color my-1">
             <Link
-              to="/Search"
+              to="/search"
               className="nav-link main-span"
               aria-current="page"
             >
@@ -32,16 +32,24 @@ export const SideBar = () => {
             <span className="fs-5 my-1 ms-2 text-color">Reviews</span>
           </li>
           <li className="nav-item my-1">
-            <a href="#" className="nav-link main-span" aria-current="page">
+            <Link
+              to="/review"
+              className="nav-link main-span"
+              aria-current="page"
+            >
               <i className="bi bi-arrow-right fs-7"></i>
               <span className="fs-7 ms-3">All reviews</span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item my-1">
-            <a href="#" className="nav-link main-span" aria-current="page">
+            <Link
+              to="/review"
+              className="nav-link main-span"
+              aria-current="page"
+            >
               <i className="bi bi-arrow-right fs-7"></i>
               <span className="fs-7 ms-3">My reviews</span>
-            </a>
+            </Link>
           </li>
           <li className="nav-item text-color my-1">
             <span className="fs-5 my-1 ms-2 text-color">Playlists</span>
@@ -106,6 +114,6 @@ export const SideBar = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </nav>
   );
 };

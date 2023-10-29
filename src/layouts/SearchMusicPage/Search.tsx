@@ -10,7 +10,7 @@ function Search() {
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [songsPerPage, setSongsPerPage] = useState(6);
+  const [songsPerPage] = useState(15);
   const [totalAmountOfSongs, setTotalAmountOfSongs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -20,32 +20,34 @@ function Search() {
       let url: string = "";
 
       if (searchUrl === "") {
-        url = `${baseUrl}?page=${currentPage - 1}&size=${songsPerPage}`;
+        url = `${baseUrl}/search?title=${searchUrl}&page=${
+          currentPage - 1
+        }&size=${songsPerPage}`;
       } else {
         url = baseUrl + searchUrl;
       }
 
       const response = await fetch(url);
       if (!response.ok) {
-        throw new Error("Something went wrong!");
+        throw new Error("Search request failed!");
       }
       const responseJson = await response.json();
-      const responseData = responseJson._embedded.songs;
+      const responseData = responseJson.content;
 
-      setTotalAmountOfSongs(responseJson.page.totalElements);
-      setTotalPages(responseJson.page.totalPages);
+      setTotalAmountOfSongs(responseJson.songs.totalElements);
+      setTotalPages(responseJson.songs);
 
       const loadedSongs: SongModel[] = [];
 
       for (const key in responseData) {
         loadedSongs.push({
-          id: responseData[key].id,
           title: responseData[key].title,
           artist: responseData[key].artist,
           album: responseData[key].album,
-          genre: responseData[key].genre,
           duration: responseData[key].duration,
           img: responseData[key].img,
+          clicks: responseData[key].clicks,
+          id: responseData[key].song_id,
         });
       }
       setSongs(loadedSongs);
@@ -57,7 +59,7 @@ function Search() {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, [currentPage, searchUrl]);
+  }, [currentPage, searchUrl, songsPerPage]);
 
   if (isLoading) {
     return (
@@ -79,9 +81,7 @@ function Search() {
     if (search === "") {
       setSearchUrl("");
     } else {
-      setSearchUrl(
-        `/search/findByTitleContaining?title=${search}&page=0&size=${songsPerPage}`
-      );
+      setSearchUrl(`/search?title=${search}&page=0&size=${songsPerPage}`);
     }
   };
 
@@ -104,7 +104,7 @@ function Search() {
                 className="form-control me-2"
                 type="search"
                 placeholder="Search..."
-                aria-labeledby="Search"
+                aria-labelledby="Search"
                 onChange={(e) => setSearch(e.target.value)}
               />
               <button
@@ -124,7 +124,7 @@ function Search() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Category
+                Search by
               </button>
               <ul
                 className="dropdown-menu"
@@ -132,32 +132,17 @@ function Search() {
               >
                 <li>
                   <a className="dropdown-item" href="#">
-                    Pop
+                    Title
                   </a>
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">
-                    Rock
+                    Artist
                   </a>
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">
-                    HipHop/Rap
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    EDM
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Country
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Classical
+                    Album
                   </a>
                 </li>
               </ul>
@@ -166,10 +151,10 @@ function Search() {
         </div>
         {totalAmountOfSongs > 0 ? (
           <>
-            <div className="mt-3">
+            <div className="mt-3 text-color">
               <h5>Number of results: ({totalAmountOfSongs})</h5>
             </div>
-            <p>
+            <p className="text-color">
               {indexOfFirstSong + 1} to {lastItem} of {totalAmountOfSongs}{" "}
               items:
             </p>
@@ -179,7 +164,7 @@ function Search() {
             ))}
           </>
         ) : (
-          <div className="m-5">
+          <div className="m-5 text-color">
             <h3>We could not find any songs that match the criteria.</h3>
           </div>
         )}

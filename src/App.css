@@ -73,4 +73,20 @@
 .main-span:active{
   color:#EDEDED;
 }
+/* Form */
+.star {
+  font-size: 30px; 
+  cursor: pointer;
+}
 
+.star.yellow {
+  color: yellow;
+}
+
+.custom-star {
+  color: rgb(189, 183, 183);
+}
+
+.custom-star-fill {
+  color: rgb(196, 196, 13);
+}

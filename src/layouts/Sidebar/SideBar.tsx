@@ -43,7 +43,7 @@ export const SideBar = () => {
           </li>
           <li className="nav-item my-1">
             <Link
-              to="/review"
+              to="/submitreview"
               className="nav-link main-span"
               aria-current="page"
             >

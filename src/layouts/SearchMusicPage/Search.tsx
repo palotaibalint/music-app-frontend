@@ -20,11 +20,13 @@ function Search() {
       let url: string = "";
 
       if (searchUrl === "") {
-        url = `${baseUrl}/search?title=${searchUrl}&page=${
+        url = `${baseUrl}/search?title=${search.toLowerCase()}&page=${
           currentPage - 1
         }&size=${songsPerPage}`;
       } else {
-        url = baseUrl + searchUrl;
+        url = `${baseUrl}/search?title=${search.toLowerCase()}&page=${
+          currentPage - 1
+        }&size=${songsPerPage}`;
       }
 
       const response = await fetch(url);
@@ -34,8 +36,8 @@ function Search() {
       const responseJson = await response.json();
       const responseData = responseJson.content;
 
-      setTotalAmountOfSongs(responseJson.songs.totalElements);
-      setTotalPages(responseJson.songs);
+      setTotalAmountOfSongs(responseJson.totalElements);
+      setTotalPages(responseData.totalPages);
 
       const loadedSongs: SongModel[] = [];
 
@@ -59,7 +61,7 @@ function Search() {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, [currentPage, searchUrl, songsPerPage]);
+  }, [currentPage, search, songsPerPage]);
 
   if (isLoading) {
     return (
@@ -76,14 +78,6 @@ function Search() {
       </div>
     );
   }
-
-  const searchHandleChange = () => {
-    if (search === "") {
-      setSearchUrl("");
-    } else {
-      setSearchUrl(`/search?title=${search}&page=0&size=${songsPerPage}`);
-    }
-  };
 
   const indexOfLastSong: number = currentPage * songsPerPage;
   const indexOfFirstSong: number = indexOfLastSong - songsPerPage;
@@ -107,12 +101,6 @@ function Search() {
                 aria-labelledby="Search"
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button
-                className="btn  btn-outline-success"
-                onClick={() => searchHandleChange()}
-              >
-                Search
-              </button>
             </div>
           </div>
           <div className="col-4">

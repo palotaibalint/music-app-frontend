@@ -1,6 +1,15 @@
-import placeholder from "../../../../Images/blank.jpg";
+import React, { useEffect, useState } from "react";
+import SongModel from "../../../../models/SongModel";
 
-export const TopSongs = () => {
+function TopSongs() {
+  const [topSongs, setTopSongs] = useState<SongModel[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8081/api/songs/top-songs") // Adjust the URL as needed
+      .then((response) => response.json())
+      .then((data) => setTopSongs(data))
+      .catch((error) => console.error("Error fetching top songs:", error));
+  }, []);
   return (
     <div className="container-fluid">
       <div className="row">
@@ -9,52 +18,20 @@ export const TopSongs = () => {
         </h2>
       </div>
       <div className="row">
-        <div className="col-sm-2">
-          <div className="image-container">
-            <img src={placeholder} alt="Your Image1" width="180" height="180" />
-            <div className="text-overlay">
-              <h4 className="text-color">Song name</h4>
-              <p className="text-color">Song creator</p>
+        {topSongs.map((song, index) => (
+          <div className="col-sm-2">
+            <div className="image-container">
+              <img src={song.img} width="180" height="180" />
+              <div className="text-overlay">
+                <h4 className="text-color">{song.title}</h4>
+                <p className="text-color">{song.artist}</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-sm-2">
-          <div className="image-container">
-            <img src={placeholder} alt="Your Image1" width="180" height="180" />
-            <div className="text-overlay">
-              <h4 className="text-color">Song name</h4>
-              <p className="text-color">Song creator</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-2">
-          <div className="image-container">
-            <img src={placeholder} alt="Your Image1" width="180" height="180" />
-            <div className="text-overlay">
-              <h4 className="text-color">Song name</h4>
-              <p className="text-color">Song creator</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-2">
-          <div className="image-container">
-            <img src={placeholder} alt="Your Image1" width="180" height="180" />
-            <div className="text-overlay">
-              <h4 className="text-color">Song name</h4>
-              <p className="text-color">Song creator</p>
-            </div>
-          </div>
-        </div>
-        <div className="col-sm-2">
-          <div className="image-container">
-            <img src={placeholder} alt="Your Image1" width="180" height="180" />
-            <div className="text-overlay">
-              <h4 className="text-color">Song name</h4>
-              <p className="text-color">Song creator</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
-};
+}
+
+export default TopSongs;

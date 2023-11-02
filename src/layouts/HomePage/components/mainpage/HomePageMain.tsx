@@ -1,7 +1,7 @@
 import { Footer } from "../../../NavBarAndFooter/Footer";
 import MainHeader from "./MainHeader";
 import { SongsForYou } from "./SongsForYou";
-import { TopSongs } from "./TopSongs";
+import TopSongs from "./TopSongs";
 import { YourMostPlayed } from "./YourMostPlayed";
 
 export const HomePageMain = () => {

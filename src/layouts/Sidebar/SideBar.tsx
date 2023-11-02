@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PlaylistManagement from "./PlaylistManagement";
 
 export const SideBar = () => {
   return (
@@ -28,90 +29,19 @@ export const SideBar = () => {
         </ul>
         <hr className="text-color d-none d-sm-block"></hr>
         <ul className="nav nav-pills flex-column  primary-color">
-          <li className="nav-item text-color my-1">
-            <span className="fs-5 my-1 ms-2 text-color">Reviews</span>
-          </li>
-          <li className="nav-item my-1">
-            <Link
-              to="/review"
-              className="nav-link main-span"
-              aria-current="page"
-            >
-              <i className="bi bi-arrow-right fs-7"></i>
-              <span className="fs-7 ms-3">All reviews</span>
-            </Link>
-          </li>
           <li className="nav-item my-1">
             <Link
               to="/submitreview"
               className="nav-link main-span"
               aria-current="page"
             >
-              <i className="bi bi-arrow-right fs-7"></i>
               <span className="fs-7 ms-3">My reviews</span>
             </Link>
           </li>
           <li className="nav-item text-color my-1">
             <span className="fs-5 my-1 ms-2 text-color">Playlists</span>
           </li>
-          <li className="nav-item my-1">
-            <a href="#" className="nav-link main-span" aria-current="page">
-              <i className="bi bi-arrow-right fs-7"></i>
-              <span className="fs-7 ms-3">All playlists</span>
-            </a>
-          </li>
-          <li className="nav-item text-color my-2">
-            <a href="#" className="nav-link playlist-item" aria-current="page">
-              <div className="row text-color">
-                <div className="col-auto">
-                  <img src="album-image.jpg" alt="Playlist Image" width="100" />
-                </div>
-                <div className="col">
-                  <h4>Playlist Name1</h4>
-                  <p>Owner Name</p>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li className="nav-item text-color my-2">
-            <a href="#" className="nav-link playlist-item" aria-current="page">
-              <div className="row text-color">
-                <div className="col-auto">
-                  <img src="album-image.jpg" alt="Playlist Image" width="100" />
-                </div>
-                <div className="col">
-                  <h4>Playlist Name2</h4>
-                  <p>Owner Name</p>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li className="nav-item text-color my-2">
-            <a href="#" className="nav-link playlist-item" aria-current="page">
-              <div className="row text-color">
-                <div className="col-auto">
-                  <img src="album-image.jpg" alt="Playlist Image" width="100" />
-                </div>
-                <div className="col">
-                  <h4>Playlist Name3</h4>
-                  <p>Owner Name</p>
-                </div>
-              </div>
-            </a>
-          </li>
-          <li className="nav-item text-color my-2">
-            <a href="#" className="nav-link playlist-item" aria-current="page">
-              <div className="row text-color">
-                <div className="col-auto">
-                  <img src="album-image.jpg" alt="Playlist Image" width="100" />
-                </div>
-                <div className="col">
-                  <h4>Playlist Name4</h4>
-                  <p>Owner Name</p>
-                </div>
-              </div>
-            </a>
-          </li>
+          <PlaylistManagement />
         </ul>
       </div>
     </nav>

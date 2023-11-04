@@ -1,8 +1,15 @@
 import React from "react";
 import placeholder from "../../Images/blank.jpg";
 import SongModel from "../../models/SongModel";
+import { useNavigate } from "react-router-dom";
 
 export const SearchSong: React.FC<{ song: SongModel }> = (props) => {
+  const navigate = useNavigate();
+
+  const handleSeeReviewsClick = () => {
+    navigate(`/song/${props.song.id}`, { state: { songData: props.song } });
+  };
+
   return (
     <div className="card mt-3 shadow p-3 mb-3 text-color background-darker rounded">
       <div className="row g-0">
@@ -35,9 +42,12 @@ export const SearchSong: React.FC<{ song: SongModel }> = (props) => {
           </div>
         </div>
         <div className="col-md-4 d-flex justify-content-center align-items-center">
-          <a className="tbn btn-md text-color" href="#">
+          <button
+            className="btn btn-md text-color"
+            onClick={handleSeeReviewsClick}
+          >
             See Reviews
-          </a>
+          </button>
         </div>
       </div>
     </div>

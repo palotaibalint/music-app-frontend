@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ErrorPage from "./errorpage/404Error";
 import { AssembledHomePage } from "./layouts/HomePage/components/AssembledHomePage";
 import { AssembledReviewPage } from "./layouts/ReviewPage/AssembledReviewPage";
@@ -14,6 +10,8 @@ import { OktaAuth, toRelativeUrl } from "@okta/okta-auth-js";
 import { Security, LoginCallback } from "@okta/okta-react";
 import { SearchMusic } from "./layouts/SearchMusicPage/SearchMusic";
 import LoginWidget from "./auth/LoginWidget";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -25,6 +23,12 @@ const CustomAuthHandler = () => {
 const RestoreOriginalUri = async (_oktaAuth: any, originalUri: any) => {
   const navigate = useNavigate();
   navigate(toRelativeUrl(originalUri || "/", window.location.origin));
+};
+
+const RedirectComponent: React.FC = () => {
+  const navigate = useNavigate();
+  navigate("/");
+  return null;
 };
 
 const App: React.FC = () => {
@@ -45,45 +49,21 @@ const App: React.FC = () => {
         restoreOriginalUri={RestoreOriginalUri}
         onAuthRequired={CustomAuthHandler}
       >
-        <RouterProvider
-          router={createBrowserRouter([
-            {
-              path: "/",
-              element: <AssembledHomePage />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/search",
-              element: <SearchMusic />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/review",
-              element: <AssembledReviewPage />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/submitreview",
-              element: <AssembledReviewFormPage />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/song/:songId",
-              element: <AssembledReviewPage />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/login",
-              element: <LoginWidget config={oktaConfig} />,
-              errorElement: <ErrorPage />,
-            },
-            {
-              path: "/login/callback",
-              element: <LoginCallback />,
-              errorElement: <ErrorPage />,
-            },
-          ])}
-        />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<AssembledHomePage />} />
+            <Route path="/search" element={<SearchMusic />} />
+            <Route path="/review" element={<AssembledReviewPage />} />
+            <Route path="/submitreview" element={<AssembledReviewFormPage />} />
+            <Route path="/song/:songId" element={<AssembledReviewPage />} />
+            <Route
+              path="/login"
+              element={<LoginWidget config={oktaConfig} />}
+            />
+            <Route path="/login/callback" element={<LoginCallback />} />
+            <Route path="*" element={<RedirectComponent />} />
+          </Routes>
+        </BrowserRouter>
       </Security>
     </div>
   );

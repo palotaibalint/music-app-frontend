@@ -34,7 +34,7 @@ export const ReviewPage: React.FC<SongProps> = ({ id }) => {
     <div className="col-sm-9 background-main d-flex flex-column justify-content-between">
       <MainHeader />
       <div className="flex-fill">
-        {song ? <ReviewSong song={song} /> : <LoadingScreen />}
+        {song ? <ReviewSong song={song} songId={id} /> : <LoadingScreen />}
       </div>
       <Footer />
     </div>

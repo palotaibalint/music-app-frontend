@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Card, Button, ListGroup, Form } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { useAuth0 } from "@auth0/auth0-react";
 import SongModel from "../../models/SongModel";
 import ReviewModel from "../../models/ReviewModel";
 import LoadingScreen from "../../utils/LoadingPage";
@@ -10,54 +11,71 @@ type Props = {
 };
 
 function ReviewSong({ song, songId }: Props) {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [reviews, setReviews] = useState<ReviewModel[]>([]);
   const [totalStars, setTotalStars] = useState(0);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
-  const [httpError, setHttpError] = useState(null);
+  const [httpError, setHttpError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCommentsFromApi = async () => {
-      const reviewUrl: string = `http://localhost:8081/api/reviews/search/findBySongId?songId=${songId}`;
-      const responseReviews = await fetch(reviewUrl);
-      if (!responseReviews.ok) {
-        throw new Error("Something went wrong!");
+      try {
+        const accessToken = isAuthenticated
+          ? await getAccessTokenSilently()
+          : null;
+
+        const headers: HeadersInit = {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        };
+
+        if (accessToken) {
+          headers.Authorization = `Bearer ${accessToken}`;
+        }
+
+        const reviewUrl: string = `http://localhost:8081/api/reviews/song/getReviewsBySongId?songId=${songId}`;
+        const responseReviews = await fetch(reviewUrl, { headers });
+
+        if (!responseReviews.ok) {
+          throw new Error("Something went wrong!");
+        }
+
+        const responseJsonReviews = await responseReviews.json();
+        const responseData = responseJsonReviews._embedded.reviews;
+        const loadedReviews: ReviewModel[] = [];
+        let weightedStarReviews: number = 0;
+
+        for (const key in responseData) {
+          loadedReviews.push({
+            id: responseData[key].id,
+            userEmail: responseData[key].userEmail,
+            userName: responseData[key].userName,
+            date: responseData[key].date,
+            rating: responseData[key].rating,
+            song_id: responseData[key].songId,
+            reviewTitle: responseData[key].reviewTitle,
+            reviewDescription: responseData[key].reviewDescription,
+          });
+          weightedStarReviews = weightedStarReviews + responseData[key].rating;
+        }
+
+        if (loadedReviews.length > 0) {
+          const round = (
+            Math.round((weightedStarReviews / loadedReviews.length) * 2) / 2
+          ).toFixed(1);
+          setTotalStars(Number(round));
+        }
+
+        setReviews(loadedReviews);
+        setIsLoadingReview(false);
+      } catch (error) {
+        setIsLoadingReview(false);
+        setHttpError((error as Error).message);
       }
-
-      const responseJsonReviews = await responseReviews.json();
-      const responseData = responseJsonReviews._embedded.reviews;
-      const loadedReviews: ReviewModel[] = [];
-      let weightedStarReviews: number = 0;
-
-      for (const key in responseData) {
-        loadedReviews.push({
-          id: responseData[key].id,
-          userEmail: responseData[key].userEmail,
-          userName: responseData[key].userName,
-          date: responseData[key].date,
-          rating: responseData[key].rating,
-          song_id: responseData[key].songId,
-          reviewTitle: responseData[key].reviewTitle,
-          reviewDescription: responseData[key].reviewDescription,
-        });
-        weightedStarReviews = weightedStarReviews + responseData[key].rating;
-      }
-
-      if (loadedReviews) {
-        const round = (
-          Math.round((weightedStarReviews / loadedReviews.length) * 2) / 2
-        ).toFixed(1);
-        setTotalStars(Number(round));
-      }
-
-      setReviews(loadedReviews);
-      setIsLoadingReview(false);
     };
 
-    fetchCommentsFromApi().catch((error: any) => {
-      setIsLoadingReview(false);
-      setHttpError(error.message);
-    });
-  }, [songId]);
+    fetchCommentsFromApi();
+  }, [songId, isAuthenticated, getAccessTokenSilently]);
 
   if (isLoadingReview) {
     return <LoadingScreen />;

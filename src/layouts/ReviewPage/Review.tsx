@@ -1,5 +1,5 @@
-import ReviewModel from "../models/ReviewModel";
-import { StarsReview } from "./StarsReview";
+import ReviewModel from "../../models/ReviewModel";
+import { StarsReview } from "../../utils/StarsReview";
 
 export const Review: React.FC<{ review: ReviewModel }> = (props) => {
   const date = new Date(props.review.date);
@@ -13,7 +13,8 @@ export const Review: React.FC<{ review: ReviewModel }> = (props) => {
   return (
     <div>
       <div className="col-sm-8 col-md-8">
-        <h5>{props.review.userEmail}</h5>
+        <h5>{props.review.userName}</h5>
+        <h3>{props.review.userEmail}</h3>
         <div className="row">
           <div className="col">{dateRender}</div>
           <div className="col">
@@ -21,6 +22,7 @@ export const Review: React.FC<{ review: ReviewModel }> = (props) => {
           </div>
         </div>
         <div className="mt-2">
+          <h3>{props.review.reviewTitle}</h3>
           <p>{props.review.reviewDescription}</p>
         </div>
       </div>

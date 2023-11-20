@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import MainHeader from "../HomePage/components/mainpage/MainHeader";
 import { Footer } from "../NavBarAndFooter/Footer";
-import ReviewSong from "./ReviewSong";
 import SongModel from "../../models/SongModel";
 import LoadingScreen from "../../utils/LoadingPage";
+import ReviewComments from "./ReviewMainPage";
 
 type SongProps = {
   id: number;
@@ -34,7 +34,7 @@ export const ReviewPage: React.FC<SongProps> = ({ id }) => {
     <div className="col-sm-9 background-main d-flex flex-column justify-content-between">
       <MainHeader />
       <div className="flex-fill">
-        {song ? <ReviewSong song={song} songId={id} /> : <LoadingScreen />}
+        {song ? <ReviewComments song={song} songId={id} /> : <LoadingScreen />}
       </div>
       <Footer />
     </div>

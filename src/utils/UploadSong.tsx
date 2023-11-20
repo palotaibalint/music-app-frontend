@@ -9,6 +9,13 @@ interface FormData {
   artist: string;
   duration: string;
   img: string;
+  file: File | null;
+}
+
+function isValidUrl(url: string): boolean {
+  // Regular expression for a valid URL
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  return urlRegex.test(url);
 }
 
 function UploadSong() {
@@ -19,6 +26,7 @@ function UploadSong() {
     artist: "",
     duration: "",
     img: "",
+    file: null,
   });
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -30,6 +38,7 @@ function UploadSong() {
       artist: "",
       duration: "",
       img: "",
+      file: null,
     });
     setErrorMessage("");
   };
@@ -37,7 +46,8 @@ function UploadSong() {
   const handleShow = () => setShow(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const { name, value, files } = e.target;
+
     if (name === "duration") {
       // Validate the "duration" format (minute:seconds)
       if (!/^\d+:\d+$/.test(value)) {
@@ -47,20 +57,41 @@ function UploadSong() {
       } else {
         setErrorMessage("");
       }
+    } else if (name === "img") {
+      // Validate the song cover URL
+      if (!isValidUrl(value)) {
+        setErrorMessage("Invalid URL for the song cover.");
+      } else {
+        setErrorMessage("");
+      }
     }
+
     setFormData({
       ...formData,
       [name]: value,
+      file: name === "file" ? (files ? files[0] : null) : formData.file,
     });
   };
 
   const handleUpload = () => {
+    // Check if there's an error message before uploading
+    if (errorMessage) {
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("album", formData.album);
+    formDataToSend.append("artist", formData.artist);
+    formDataToSend.append("duration", formData.duration);
+    formDataToSend.append("img", formData.img);
+    if (formData.file) {
+      formDataToSend.append("file", formData.file);
+    }
+
     fetch("http://localhost:8081/api/songs/addSong", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      body: formDataToSend,
     })
       .then((response) => {
         if (response.ok) {
@@ -133,13 +164,17 @@ function UploadSong() {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>Image URL</Form.Label>
+              <Form.Label>Song cover URL</Form.Label>
               <Form.Control
                 type="text"
                 name="img"
                 value={formData.img}
                 onChange={handleChange}
               />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Song File</Form.Label>
+              <Form.Control type="file" name="file" onChange={handleChange} />
             </Form.Group>
           </Form>
         </Modal.Body>

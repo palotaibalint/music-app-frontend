@@ -4,18 +4,22 @@ import { useAuth0 } from "@auth0/auth0-react";
 import SongModel from "../../models/SongModel";
 import ReviewModel from "../../models/ReviewModel";
 import LoadingScreen from "../../utils/LoadingPage";
+import { Review } from "./Review";
+import AddReviewButton from "./AddReviewButton";
 
 type Props = {
   song: SongModel;
   songId: number;
 };
 
-function ReviewSong({ song, songId }: Props) {
+function ReviewComments({ song, songId }: Props) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [reviews, setReviews] = useState<ReviewModel[]>([]);
   const [totalStars, setTotalStars] = useState(0);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
   const [httpError, setHttpError] = useState<string | null>(null);
+  const [newReview, setNewReview] = useState<ReviewModel | null>(null);
+  const [replyTo, setReplyTo] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchCommentsFromApi = async () => {
@@ -89,6 +93,25 @@ function ReviewSong({ song, songId }: Props) {
     );
   }
 
+  const handleAddReview = () => {
+    setNewReview({
+      id: -1, // Use a temporary negative ID to indicate it's a new review
+      userEmail: "", // Assuming you might get the user's email from Auth0
+      userName: "", // Set the user's name based on your authentication system
+      date: new Date(), // Set the current date
+      rating: 0, // Set a default rating or let the user choose
+      song_id: songId,
+      reviewTitle: "", // You might want to add a title to the review
+      reviewDescription: "", // Initialize with an empty description
+    });
+  };
+
+  const handleReplyTo = (reviewId: number) => {
+    // Implement the logic to handle replies to existing reviews
+    // You can use setReplyTo to store the review ID to which the user is replying.
+    setReplyTo(reviewId);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -108,9 +131,19 @@ function ReviewSong({ song, songId }: Props) {
             </Card.Body>
           </Card>
         </div>
+        <div className="col-md-6">
+          {/* Review Section */}
+          <div className="mb-4">
+            <AddReviewButton onAddReview={handleAddReview} />
+          </div>
+          {/* Display Existing Reviews */}
+          {reviews.map((review) => (
+            <Review review={review} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-export default ReviewSong;
+export default ReviewComments;

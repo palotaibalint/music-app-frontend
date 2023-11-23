@@ -3,7 +3,7 @@ import MainHeader from "../HomePage/components/mainpage/MainHeader";
 import { Footer } from "../NavBarAndFooter/Footer";
 import SongModel from "../../models/SongModel";
 import LoadingScreen from "../../utils/LoadingPage";
-import ReviewComments from "./ReviewMainPage";
+import ReviewComments from "./ReviewComments";
 
 type SongProps = {
   id: number;
@@ -13,7 +13,7 @@ export const ReviewPage: React.FC<SongProps> = ({ id }) => {
   const [song, setSong] = useState<SongModel | null>(null);
   useEffect(() => {
     const songId = id;
-    const apiUrl = `http://localhost:8081/api/songs/${songId}`;
+    const apiUrl = `http://localhost:8081/api/songs/public/with-id?id=${songId}`;
 
     fetch(apiUrl)
       .then((response) => {

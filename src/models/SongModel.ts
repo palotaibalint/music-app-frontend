@@ -2,12 +2,12 @@ class SongModel{
     title: string;
     artist: string;
     album?: string;
-    duration: number;
+    duration: string;
     img?: string;
     id: number;
     clicks: number;
 
-    constructor(title: string,artist: string,album: string,genre: string,duration: number,img: string,clicks: number,id: number){
+    constructor(title: string,artist: string,album: string,genre: string,duration: string,img: string,clicks: number,id: number){
         this.title=title;
         this.album=album;
         this.artist=artist;

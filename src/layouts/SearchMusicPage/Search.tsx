@@ -5,7 +5,8 @@ import { Pagination } from "../../utils/Pagination";
 
 function Search() {
   const [search, setSearch] = useState("");
-  const [searchUrl, setSearchUrl] = useState("");
+  const [searchUrl] = useState("");
+  const [searchBy, setSearchBy] = useState("title");
   const [songs, setSongs] = useState<SongModel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [httpError, setHttpError] = useState(null);
@@ -14,17 +15,30 @@ function Search() {
   const [totalAmountOfSongs, setTotalAmountOfSongs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  const handleSearchByChange = (newSearchBy: string) => {
+    setSearchBy(newSearchBy);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
   useEffect(() => {
     const fetchSongs = async () => {
-      const baseUrl: string = "http://localhost:8081/api/songs";
+      const baseUrl: string = "http://localhost:8081/api/songs/public";
       let url: string = "";
 
-      if (searchUrl === "") {
-        url = `${baseUrl}/search?title=${search.toLowerCase()}&page=${
+      if (searchBy === "title") {
+        url = `${baseUrl}/search/title?title=${search.toLowerCase()}&page=${
           currentPage - 1
         }&size=${songsPerPage}`;
-      } else {
-        url = `${baseUrl}/search?title=${search.toLowerCase()}&page=${
+      } else if (searchBy === "artist") {
+        url = `${baseUrl}/search/artist?artist=${search.toLowerCase()}&page=${
+          currentPage - 1
+        }&size=${songsPerPage}`;
+      } else if (searchBy === "album") {
+        url = `${baseUrl}/search/album?album=${search.toLowerCase()}&page=${
           currentPage - 1
         }&size=${songsPerPage}`;
       }
@@ -36,8 +50,13 @@ function Search() {
       const responseJson = await response.json();
       const responseData = responseJson.content;
 
+      console.log("Response Data:", responseData); // Log responseData
+
+      // Set total amount of songs and total pages
       setTotalAmountOfSongs(responseJson.totalElements);
-      setTotalPages(responseData.totalPages);
+      setTotalPages(responseJson.totalPages);
+
+      console.log("Total Pages:", responseData.totalPages); // Log totalPages
 
       const loadedSongs: SongModel[] = [];
 
@@ -61,7 +80,7 @@ function Search() {
       setHttpError(error.message);
     });
     window.scrollTo(0, 0);
-  }, [currentPage, search, songsPerPage]);
+  }, [currentPage, searchBy, search, songsPerPage, searchUrl]);
 
   if (isLoading) {
     return (
@@ -81,12 +100,17 @@ function Search() {
 
   const indexOfLastSong: number = currentPage * songsPerPage;
   const indexOfFirstSong: number = indexOfLastSong - songsPerPage;
-  let lastItem =
-    songsPerPage * currentPage <= totalAmountOfSongs
-      ? songsPerPage * currentPage
-      : totalAmountOfSongs;
+  let lastItem = Math.min(indexOfLastSong, totalAmountOfSongs);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => {
+    if (pageNumber < 1) {
+      setCurrentPage(1);
+    } else if (pageNumber > totalPages) {
+      setCurrentPage(totalPages);
+    } else {
+      setCurrentPage(pageNumber);
+    }
+  };
 
   return (
     <div className="container">
@@ -112,24 +136,36 @@ function Search() {
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Search by
+                Search by {searchBy}
               </button>
               <ul
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuButton1"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => handleSearchByChange("title")}
+                  >
                     Title
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => handleSearchByChange("artist")}
+                  >
                     Artist
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => handleSearchByChange("album")}
+                  >
                     Album
                   </a>
                 </li>

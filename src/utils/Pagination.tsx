@@ -1,33 +1,18 @@
+import React from "react";
+
 export const Pagination: React.FC<{
   currentPage: number;
   totalPages: number;
-  paginate: any;
+  paginate: (pageNumber: number) => void;
 }> = (props) => {
   const pageNumbers = [];
 
-  if (props.currentPage === 1) {
-    pageNumbers.push(props.currentPage);
-    if (props.totalPages >= props.currentPage + 1) {
-      pageNumbers.push(props.currentPage + 1);
-    }
-    if (props.totalPages >= props.currentPage + 2) {
-      pageNumbers.push(props.currentPage + 2);
-    }
-  } else if (props.currentPage > 1) {
-    if (props.currentPage >= 3) {
-      pageNumbers.push(props.currentPage - 2);
-      pageNumbers.push(props.currentPage - 1);
-    } else {
-      pageNumbers.push(props.currentPage - 1);
-    }
-    pageNumbers.push(props.currentPage);
-
-    if (props.totalPages >= props.currentPage + 1) {
-      pageNumbers.push(props.currentPage + 1);
-    }
-    if (props.totalPages >= props.currentPage + 2) {
-      pageNumbers.push(props.currentPage + 2);
-    }
+  for (
+    let i = Math.max(1, props.currentPage - 2);
+    i <= Math.min(props.totalPages, props.currentPage + 2);
+    i++
+  ) {
+    pageNumbers.push(i);
   }
 
   return (
@@ -41,7 +26,7 @@ export const Pagination: React.FC<{
             key={number}
             onClick={() => props.paginate(number)}
             className={
-              "page-item" + (props.currentPage === number ? "active" : "")
+              "page-item" + (props.currentPage === number ? " active" : "")
             }
           >
             <button className="page-link">{number}</button>

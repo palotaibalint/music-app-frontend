@@ -8,7 +8,8 @@ function Playlist() {
 
   useEffect(() => {
     const fetchSongs = async () => {
-      const baseUrl: string = "http://localhost:8081/api/songs/playlist";
+      const baseUrl: string =
+        "http://localhost:8081/api/playlists/public/playlist";
 
       const response = await fetch(baseUrl);
       if (!response.ok) {

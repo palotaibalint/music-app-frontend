@@ -89,7 +89,7 @@ function UploadSong() {
       formDataToSend.append("file", formData.file);
     }
 
-    fetch("http://localhost:8081/api/songs/addSong", {
+    fetch("http://localhost:8081/api/songs/private/addSong", {
       method: "POST",
       body: formDataToSend,
     })

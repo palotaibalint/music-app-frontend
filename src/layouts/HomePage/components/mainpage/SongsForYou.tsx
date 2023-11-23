@@ -9,7 +9,7 @@ export const SongsForYou = () => {
 
   useEffect(() => {
     const fetchSongs = async () => {
-      const baseUrl: string = "http://localhost:8081/api/songs";
+      const baseUrl: string = "http://localhost:8081/api/songs/public";
       const url: string = `${baseUrl}?page=0&size=4`;
       const response = await fetch(url);
       if (!response.ok) {

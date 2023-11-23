@@ -5,7 +5,7 @@ function TopSongs() {
   const [topSongs, setTopSongs] = useState<SongModel[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8081/api/songs/top-songs") // Adjust the URL as needed
+    fetch("http://localhost:8081/api/songs/public/top-songs") // Adjust the URL as needed
       .then((response) => response.json())
       .then((data) => setTopSongs(data))
       .catch((error) => console.error("Error fetching top songs:", error));

@@ -15,7 +15,7 @@ function PlaylistManagement() {
   const handleCreatePlaylist = () => {
     const data = { name: newPlaylistName };
 
-    fetch("http://localhost:8081/api/playlists", {
+    fetch("http://localhost:8081/api/playlists/private/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,7 @@ function PlaylistManagement() {
   useEffect(() => {
     setIsLoading(true);
 
-    fetch("http://localhost:8081/api/playlists")
+    fetch("http://localhost:8081/api/playlists/private/get-all")
       .then((response) => {
         if (response.ok) {
           return response.json();

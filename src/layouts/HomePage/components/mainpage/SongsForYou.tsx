@@ -25,6 +25,7 @@ export const SongsForYou = () => {
           title: responseData[key].title,
           artist: responseData[key].artist,
           album: responseData[key].album,
+          genres: responseData[key].genres,
           duration: responseData[key].duration,
           clicks: responseData[key].clicks,
           img: responseData[key].img,

@@ -50,8 +50,6 @@ function Search() {
       const responseJson = await response.json();
       const responseData = responseJson.content;
 
-      console.log("Response Data:", responseData); // Log responseData
-
       // Set total amount of songs and total pages
       setTotalAmountOfSongs(responseJson.totalElements);
       setTotalPages(responseJson.totalPages);
@@ -65,6 +63,7 @@ function Search() {
           title: responseData[key].title,
           artist: responseData[key].artist,
           album: responseData[key].album,
+          genres: responseData[key].genres,
           duration: responseData[key].duration,
           img: responseData[key].img,
           clicks: responseData[key].clicks,

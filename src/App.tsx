@@ -7,6 +7,7 @@ import { SearchMusic } from "./layouts/SearchMusicPage/SearchMusic";
 import "./App.css";
 import ErrorPage from "./errorpage/404Error";
 import RedirectComponent from "./utils/RedirectComponent";
+import { AssembledPlaylistPage } from "./layouts/Sidebar/Playlist/AssembledPlaylistPage";
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -25,8 +26,11 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<AssembledHomePage />} />
           <Route path="/search" element={<SearchMusic />} />
-          <Route path="/review" element={<AssembledReviewPage />} />
           <Route path="/song/:songId" element={<AssembledReviewPage />} />
+          <Route
+            path="/playlist/:playlistId"
+            element={<AssembledPlaylistPage />}
+          />
           <Route path="/error/:code" element={<ErrorPage />} />
           <Route path="*" element={<RedirectComponent />} />
         </Routes>

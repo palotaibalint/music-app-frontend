@@ -48,6 +48,7 @@ export const StarsReview: React.FC<{ Rating: number; size: number }> = (
           width={props.size}
           height={props.size}
           fill="currentColor"
+          style={{ color: "gold" }}
           className="bi bi-star-half"
           viewBox="0 0 16 16"
         >
@@ -62,6 +63,7 @@ export const StarsReview: React.FC<{ Rating: number; size: number }> = (
           width={props.size}
           height={props.size}
           fill="currentColor"
+          style={{ color: "gold" }}
           className="bi bi-star"
           viewBox="0 0 16 16"
         >

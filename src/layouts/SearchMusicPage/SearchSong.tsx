@@ -38,6 +38,8 @@ export const SearchSong: React.FC<{ song: SongModel }> = (props) => {
               <br />
               Duration: {props.song.duration}
               <br />
+              Genres: {props.song.genres.join(", ")}
+              <br />
             </p>
           </div>
         </div>

@@ -3,7 +3,7 @@ import MainHeader from "../HomePage/components/mainpage/MainHeader";
 import { Footer } from "../NavBarAndFooter/Footer";
 import SongModel from "../../models/SongModel";
 import LoadingScreen from "../../utils/LoadingPage";
-import ReviewComments from "./ReviewComments";
+import ReviewComments from "./Comments/ReviewComments";
 
 type SongProps = {
   id: number;

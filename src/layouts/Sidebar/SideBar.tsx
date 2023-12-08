@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import PlaylistManagement from "./PlaylistManagement";
+import PlaylistManagement from "./Playlist/PlaylistManagement";
 
 export const SideBar = () => {
   return (
@@ -29,15 +29,6 @@ export const SideBar = () => {
         </ul>
         <hr className="text-color d-none d-sm-block"></hr>
         <ul className="nav nav-pills flex-column  primary-color">
-          <li className="nav-item my-1">
-            <Link
-              to="/submitreview"
-              className="nav-link main-span"
-              aria-current="page"
-            >
-              <span className="fs-7 ms-3">My reviews</span>
-            </Link>
-          </li>
           <li className="nav-item text-color my-1">
             <span className="fs-5 my-1 ms-2 text-color">Playlists</span>
           </li>

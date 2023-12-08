@@ -17,6 +17,9 @@ export const Song = () => {
             <p>Album</p>
           </div>
           <div className="col">
+            <p>Genres</p>
+          </div>
+          <div className="col">
             <p>Duration</p>
           </div>
         </div>

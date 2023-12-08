@@ -1,12 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
+import { createRoot } from "react-dom/client";
 import { Auth0Provider } from "@auth0/auth0-react";
 import App from "./App";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = createRoot(document.getElementById("root")!);
+
 root.render(
   <React.StrictMode>
     <Auth0Provider
@@ -14,6 +12,8 @@ root.render(
       clientId="KJk9VJyVkpytcxdMsiBU6hGTothL9lJO"
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: "https://music-api",
+        scope: "openid profile email",
       }}
     >
       <App />

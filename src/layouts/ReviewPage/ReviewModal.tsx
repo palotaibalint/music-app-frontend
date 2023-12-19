@@ -20,6 +20,10 @@ interface ReviewModalProps {
   handleAddReview: () => void;
 }
 
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+};
+
 const ReviewModal: React.FC<ReviewModalProps> = ({
   show,
   handleClose,
@@ -34,7 +38,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
       <Modal.Title>Add Review</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="reviewTitle">
           <Form.Label>Review Title</Form.Label>
           <Form.Control
@@ -43,6 +47,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             name="reviewTitle"
             value={reviewData.reviewTitle}
             onChange={handleInputChange}
+            maxLength={255}
           />
         </Form.Group>
 
@@ -55,6 +60,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             name="reviewDescription"
             value={reviewData.reviewDescription}
             onChange={handleInputChange}
+            maxLength={255}
           />
         </Form.Group>
 

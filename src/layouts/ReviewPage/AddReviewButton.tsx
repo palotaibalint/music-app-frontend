@@ -5,9 +5,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 interface AddReviewButtonProps {
   songId: number | undefined;
+  onReviewAdded: () => void;
 }
 
-const AddReviewButton: React.FC<AddReviewButtonProps> = ({ songId }) => {
+const AddReviewButton: React.FC<AddReviewButtonProps> = ({
+  songId,
+  onReviewAdded,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [reviewData, setReviewData] = useState({
     rating: 0,
@@ -77,6 +81,8 @@ const AddReviewButton: React.FC<AddReviewButtonProps> = ({ songId }) => {
 
         const url = `http://localhost:8081/api/reviews/private/post?userName=${user?.nickname}&userEmail=${user?.email}`;
         const response = await fetch(url, requestOptions);
+
+        onReviewAdded();
 
         if (!response.ok) {
           throw new Error("Something went wrong");

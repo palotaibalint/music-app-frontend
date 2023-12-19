@@ -15,6 +15,10 @@ interface CommentModalProps {
   handleAddComment: () => void;
 }
 
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+};
+
 const CommentModal: React.FC<CommentModalProps> = ({
   show,
   handleClose,
@@ -27,7 +31,7 @@ const CommentModal: React.FC<CommentModalProps> = ({
       <Modal.Title>Reply to the review</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Form.Group controlId="commentText">
           <Form.Label>Reply</Form.Label>
           <Form.Control

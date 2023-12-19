@@ -5,6 +5,7 @@ import { Review } from "./Review";
 export const LatestReviews: React.FC<{
   reviews: ReviewModel[];
   songId: number | undefined;
+  onDelete: () => void;
   mobile: boolean;
 }> = (props) => {
   return (
@@ -20,6 +21,7 @@ export const LatestReviews: React.FC<{
                 review={eachReview}
                 songId={props.songId}
                 key={eachReview.id}
+                onDelete={props.onDelete}
               />
             ))}
           </>

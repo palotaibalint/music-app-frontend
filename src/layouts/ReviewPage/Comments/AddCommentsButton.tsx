@@ -5,9 +5,13 @@ import CommentModal from "./CommentModal";
 
 interface AddCommentsButtonProps {
   reviewId: number | undefined;
+  onAdd: () => void;
 }
 
-const AddCommentsButton: React.FC<AddCommentsButtonProps> = ({ reviewId }) => {
+const AddCommentsButton: React.FC<AddCommentsButtonProps> = ({
+  reviewId,
+  onAdd,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [commentData, setCommentData] = useState({
     reviewId: reviewId,
@@ -55,6 +59,7 @@ const AddCommentsButton: React.FC<AddCommentsButtonProps> = ({ reviewId }) => {
 
         const url = `http://localhost:8081/api/comments/private/addComment?username=${user?.nickname}&text=${commentData.text}&review-id=${reviewId}`;
         const response = await fetch(url, requestOptions);
+        onAdd();
 
         if (!response.ok) {
           throw new Error("Something went wrong");

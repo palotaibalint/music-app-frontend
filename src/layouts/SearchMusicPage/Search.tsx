@@ -67,6 +67,7 @@ function Search() {
           duration: responseData[key].duration,
           img: responseData[key].img,
           clicks: responseData[key].clicks,
+          link: responseData[key].link,
           id: responseData[key].song_id,
         });
       }

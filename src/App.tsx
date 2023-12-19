@@ -5,9 +5,13 @@ import { AssembledReviewPage } from "./layouts/ReviewPage/AssembledReviewPage";
 import LoadingPage from "./utils/LoadingPage";
 import { SearchMusic } from "./layouts/SearchMusicPage/SearchMusic";
 import "./App.css";
+import "react-chat-elements/dist/main.css";
 import ErrorPage from "./errorpage/404Error";
 import RedirectComponent from "./utils/RedirectComponent";
 import { AssembledPlaylistPage } from "./layouts/Sidebar/Playlist/AssembledPlaylistPage";
+import { AssembledUserPage } from "./layouts/UserPage/AssembledUserPage";
+import { AssembledMessagePage } from "./layouts/UserPage/Messages/AssembledMessagePage";
+import { AssembledOwnerPage } from "./layouts/UserPage/AssembledOwnerPage";
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,6 +35,9 @@ const App: React.FC = () => {
             path="/playlist/:playlistId"
             element={<AssembledPlaylistPage />}
           />
+          <Route path="/profile/:username" element={<AssembledOwnerPage />} />
+          <Route path="/profile" element={<AssembledUserPage />} />
+          <Route path="/messages" element={<AssembledMessagePage />} />
           <Route path="/error/:code" element={<ErrorPage />} />
           <Route path="*" element={<RedirectComponent />} />
         </Routes>

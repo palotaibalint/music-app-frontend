@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import AddPlaylistButton from "./AddPlaylistButton";
 import PlaylistModel from "../../../models/PlaylistModel";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function PlaylistManagement() {
   const [playlists, setPlaylists] = useState<PlaylistModel[]>([]);
@@ -12,60 +12,61 @@ function PlaylistManagement() {
 
   const navigate = useNavigate();
 
-  const handlePlaylistClick = (playlistId: number) => {
-    navigate(`/playlist/${playlistId}`, { state: { playlistId: playlistId } });
+  const handlePlaylistClick = (playlistId: number, playlistName: string) => {
+    navigate(`/playlist/${playlistId}`, {
+      state: { playlistId: playlistId, playlistName: playlistName },
+    });
+  };
+
+  const fetchPlaylists = async () => {
+    try {
+      const accessToken = await getAccessTokenSilently({
+        authorizationParams: {
+          audience: "https://music-api",
+          scope: "openid profile email",
+        },
+      });
+
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      };
+
+      const url = `http://localhost:8081/api/playlists/private/get-all?username=${user?.nickname}`;
+      const responsePlaylists = await fetch(url, requestOptions);
+
+      if (!responsePlaylists.ok) {
+        throw new Error(`HTTP error! Status: ${responsePlaylists.status}`);
+      }
+
+      const responseData = await responsePlaylists.json();
+
+      const loadedPlaylists: PlaylistModel[] = Object.keys(responseData).map(
+        (key) => ({
+          id: responseData[key].id,
+          username: responseData[key].username,
+          songs: responseData[key].songs,
+          name: responseData[key].name,
+        })
+      );
+
+      setPlaylists(loadedPlaylists);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setHttpError(
+        error instanceof Error ? error.message : "An error occurred"
+      );
+    }
   };
 
   useEffect(() => {
-    const fetchPlaylists = async () => {
-      if (isAuthenticated) {
-        try {
-          const accessToken = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: "https://music-api",
-              scope: "openid profile email",
-            },
-          });
-
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          };
-
-          const url = `http://localhost:8081/api/playlists/private/get-all?username=${user?.nickname}`;
-          const responsePlaylists = await fetch(url, requestOptions);
-
-          if (!responsePlaylists.ok) {
-            // Handle HTTP error
-            throw new Error(`HTTP error! Status: ${responsePlaylists.status}`);
-          }
-
-          const responseData = await responsePlaylists.json();
-
-          const loadedPlaylists: PlaylistModel[] = Object.keys(
-            responseData
-          ).map((key) => ({
-            id: responseData[key].id,
-            username: responseData[key].username,
-            songs: responseData[key].songs,
-            name: responseData[key].name,
-          }));
-
-          setPlaylists(loadedPlaylists);
-          setIsLoading(false);
-        } catch (error) {
-          setIsLoading(false);
-          setHttpError(
-            error instanceof Error ? error.message : "An error occurred"
-          );
-        }
-      }
-    };
-
-    fetchPlaylists();
+    if (isAuthenticated) {
+      fetchPlaylists();
+    }
   }, [isAuthenticated, getAccessTokenSilently, user]);
 
   return (
@@ -90,33 +91,32 @@ function PlaylistManagement() {
 
       <div style={{ marginBottom: "0px" }}>
         {playlists.map((playlist) => (
-          <button
-            onClick={() => handlePlaylistClick(playlist.id)}
-            className="text-color fs-3 my-4 text-decoration-none"
+          <div
             key={playlist.id}
+            onClick={() => handlePlaylistClick(playlist.id, playlist.name)}
+            className="nav-link main-span"
             style={{
-              backgroundColor: "#140936",
-              width: "100%",
-              textAlign: "left",
+              backgroundColor: "#0f0335",
               color: "white",
-              padding: "0px",
-              border: "0px",
-              cursor: "pointer",
+              padding: "15px 20px", // Increased padding
+              margin: "10px 0", // Adjusted margin
+              borderRadius: "5px",
+              display: "flex",
+              alignItems: "center",
               transition: "background-color 0.3s ease",
+              cursor: "pointer",
+              fontSize: "1.25rem", // Optional: Increase font size
             }}
             onMouseOver={(e) =>
               (e.currentTarget.style.backgroundColor = "#2c215a")
             }
             onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#140936")
+              (e.currentTarget.style.backgroundColor = "#0f0335")
             }
           >
-            {playlist.name}
-            <br />
-            <span style={{ fontSize: "18px", color: "white" }}>
-              Songs: {playlist.songs?.length}
-            </span>
-          </button>
+            <i className="bi bi-music-note-list fs-5"></i>
+            <span className="ms-2">{playlist.name}</span>
+          </div>
         ))}
       </div>
 
@@ -129,7 +129,12 @@ function PlaylistManagement() {
         </p>
       )}
 
-      <AddPlaylistButton />
+      {isAuthenticated && (
+        <div style={{ marginTop: "0px" }}>
+          <AddPlaylistButton onPlaylistAdded={fetchPlaylists} />
+        </div>
+      )}
+
       {httpError && <p>Error: {httpError}</p>}
     </div>
   );

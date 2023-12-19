@@ -15,20 +15,20 @@
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  height: calc(100vh); /* Adjust the height as needed to account for the Bootstrap navbar height */
+  height: calc(100vh);
   overflow-y: auto;
 }
 
 .sticky-sidebar::-webkit-scrollbar {
-  width: 0.5em; /* Adjust the width as needed */
+  width: 0.5em; 
 }
 
 .sticky-sidebar::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Hide the thumb */
+  background-color: transparent;
 }
 
 .sticky-sidebar {
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
 }
 
 .fixed-sidebar{
@@ -39,11 +39,11 @@
 /* colors */
 
 .primary-color{
-  background-color: #140936; 
+  background-color: #0f0335; 
 }
 
 .playlist-item{
-  background-color: #140936; 
+  background-color: #0f0335; 
 }
 
 .playlist-item:hover{
@@ -64,6 +64,10 @@
 
 .text-color{
   color: #EDEDED; 
+}
+
+.danger-color{
+  color: #ca0808; 
 }
 
 .main-span{
